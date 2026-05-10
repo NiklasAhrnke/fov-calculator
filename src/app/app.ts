@@ -1,10 +1,10 @@
 import { TuiRoot } from '@taiga-ui/core';
 import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import {FovCalculator} from './components/fov-calculator/fov-calculator';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, TuiRoot, TuiRoot],
+  imports: [TuiRoot, TuiRoot, FovCalculator],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })

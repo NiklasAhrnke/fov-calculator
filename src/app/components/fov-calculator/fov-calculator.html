@@ -1,0 +1,58 @@
+<div class="fov-calculator">
+    <h1 class="title"> FoV Calculator </h1>
+    <hr class="divider" />
+    <main>
+      <div class="main-left">
+        <form [formGroup]="inputs">
+          <div class="slider-header">
+            <label tuiLabel>Monitor Größe</label>
+            <span class="value">{{ inputs.controls.screenSize.value }}"</span>
+          </div>
+          <input tuiSlider
+                 type="range"
+                 min="0"
+                 max="100"
+                 step="1"
+                 [formControl]="inputs.controls.screenSize"
+          />
+
+          <label tuiLabel>
+            Auflösung
+            <tui-textfield
+              iconStart="@tui.monitor"
+              tuiChevron
+              tuiTextfieldSize="m"
+              [tuiTextfieldCleaner]="false"
+            >
+              <input
+                tuiSelect
+                [formControl]="inputs.controls.resolution"
+              />
+
+              <tui-data-list-wrapper
+                *tuiDropdown
+                [items]="resolutions"
+              />
+
+              <tui-icon tuiTooltip="I am a hint" />
+            </tui-textfield>
+          </label>
+
+          <div class="slider-header">
+            <label tuiLabel>Abstand zum Monitor</label>
+            <span class="value">{{ inputs.controls.distance.value }} cm</span>
+          </div>
+          <input tuiSlider
+                 type="range"
+                 min="30"
+                 max="200"
+                 step="1"
+                 [formControl]="inputs.controls.distance"
+          />
+        </form>
+      </div>
+      <div class="main-right">
+        {{fov}}°
+      </div>
+    </main>
+</div>
