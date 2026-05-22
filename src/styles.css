@@ -13,5 +13,5 @@ body {
 
 
 tui-root {
-  border-image: none !important; //working
+  border-image: none !important; /* working */
 }

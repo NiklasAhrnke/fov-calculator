@@ -49,6 +49,27 @@
                  step="1"
                  [formControl]="inputs.controls.distance"
           />
+
+
+          <label class="checkbox">
+            <input tuiCheckbox size="s" type="checkbox" [formControl]="inputs.controls.curved"/>
+            Curved Monitor
+          </label>
+
+          @if (inputs.controls.curved.value) {
+            <div class="slider-header">
+              <label tuiLabel>Krümmungsradius</label>
+              <span class="value">{{ inputs.controls.radius.value! * 10}}R</span>
+            </div>
+            <input tuiSlider
+                   type="range"
+                   min="80"
+                   max="400"
+                   step="10"
+                   [formControl]="inputs.controls.radius"
+            />
+          }
+
         </form>
       </div>
       <div class="main-right">

@@ -24,10 +24,12 @@
 }
 
 .main-right {
+  font-family: 'Share Tech Mono', monospace;
   width: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
+  font-size: 2rem;
 }
 
 .title {
@@ -51,4 +53,16 @@
     font-family: 'Share Tech Mono', monospace;
     font-size: 14px;
   }
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+label {
+  font-size: 0.8rem !important;
+  font-weight: 300 !important;
+  font-family: 'Unbounded', sans-serif !important;
 }

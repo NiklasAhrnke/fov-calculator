@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
-import {TuiIcon, TuiLabel, TuiSliderComponent} from '@taiga-ui/core';
+import {TuiCheckbox, TuiIcon, TuiLabel, TuiSliderComponent} from '@taiga-ui/core';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {TuiChevron, TuiDataListWrapper, TuiSelect, TuiTooltip} from '@taiga-ui/kit';
 
@@ -26,6 +26,7 @@ export interface AspectRatio {
     TuiIcon,
     TuiSelect,
     TuiTooltip,
+    TuiCheckbox,
   ],
   templateUrl: './fov-calculator.html',
   styleUrl: './fov-calculator.css',
@@ -36,14 +37,16 @@ export class FovCalculator {
   inputs = new FormGroup({
     screenSize: new FormControl(27),
     resolution: new FormControl("1920x1080"),
-    distance: new FormControl(60)
+    distance: new FormControl(60),
+    curved: new FormControl(false),
+    radius: new FormControl(100),
   });
 
   fov: string = this.calculateFoV(27, "1920x1080", 60).toFixed(1);
 
   ngOnInit(): void {
     this.inputs.valueChanges.subscribe(values => {
-      this.fov = this.calculateFoV(values.screenSize!, values.resolution!, values.distance!).toFixed(1);
+      this.fov = this.calculateFoV(values.screenSize!, values.resolution!, values.distance!, values.radius!).toFixed(1);
     });
   }
 
@@ -78,11 +81,33 @@ export class FovCalculator {
     return diagonal * 2.54 * (aspectRatio.a / Math.sqrt(Math.pow(aspectRatio.a, 2) + Math.pow(aspectRatio.b, 2)))
   }
 
-  calculateFoV(screenSize: number, resolution: string, distance: number): number {
+  calculateRadiant(width: number, radius: number) {
+    return width / (2 * radius);
+  }
+
+  calculateXDistance(radius: number, radiant: number) {
+    return radius * Math.sin(radiant);
+  }
+
+  calculateZDistance(radius: number, radiant: number) {
+    return radius * (1 - Math.cos(radiant))
+  }
+
+  calculateFoV(screenSize: number, resolution: string, distance: number, radius?: number): number {
 
     const aspectRatio = this.calculateAspectRatio(this.parseResolution(resolution))
     const width = this.calculateWidth(screenSize, aspectRatio);
-    return (2 * Math.atan((width / 2) / distance) * (180 / Math.PI));
+
+
+    if(this.inputs.controls.curved.value ) {
+      const radiant = this.calculateRadiant(width, radius!);
+      const xDistance = this.calculateXDistance(radius!, radiant);
+      const zDistance = this.calculateZDistance(radius!, radiant);
+      console.log(width, xDistance, zDistance, distance);
+      return (2 * Math.atan(xDistance / (distance - zDistance))) * (180 / Math.PI);
+    } else {
+      return (2 * Math.atan((width / 2) / distance) * (180 / Math.PI));
+    }
   }
 
 }
